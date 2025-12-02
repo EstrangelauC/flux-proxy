@@ -1,0 +1,28 @@
+name: Flux Proxy
+
+on:
+  workflow_dispatch:
+    inputs:
+      prompt:
+        description: "Prompt para gerar imagem"
+        required: true
+
+jobs:
+  gerar:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Chamar HuggingFace FLUX
+        run: |
+          curl -s -X POST \
+            -H "Authorization: Bearer ${{ secrets.HF_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d "{\"inputs\": \"${{ github.event.inputs.prompt }}\"}" \
+            https://api.huggingface.co/models/black-forest-labs/FLUX.1-schnell \
+            -o result.json
+
+      - name: Guardar resultado
+        uses: actions/upload-artifact@v3
+        with:
+          name: flux-result
+          path: result.json
