@@ -12,14 +12,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Chamar HuggingFace FLUX
+         - name: Verificar se HF_TOKEN está presente
         run: |
-          curl -s -X POST \
-            -H "Authorization: Bearer ${{ secrets.HF_TOKEN }}" \
-            -H "Content-Type: application/json" \
-            -d "{\"inputs\": \"${{ github.event.inputs.prompt }}\"}" \
-            https://api.huggingface.co/models/black-forest-labs/FLUX.1-schnell \
-            -o result.json
+          if [ -z "${{ secrets.HF_TOKEN }}" ]; then
+            echo "HF_TOKEN está vazio!"
+            exit 1
+          else
+            echo "HF_TOKEN recebido com sucesso ✅"
+          fi
 
       - name: Guardar resultado
         uses: actions/upload-artifact@v4
