@@ -10,18 +10,20 @@ on:
 jobs:
   gerar:
     runs-on: ubuntu-latest
-
     steps:
-         - name: Verificar se HF_TOKEN está presente
+      - name: Verificar se HF_TOKEN está presente
         run: |
           if [ -z "${{ secrets.HF_TOKEN }}" ]; then
-            echo "HF_TOKEN está vazio!"
+            echo "❌ HF_TOKEN está vazio!"
             exit 1
           else
-            echo "HF_TOKEN recebido com sucesso ✅"
+            echo "✅ HF_TOKEN recebido com sucesso"
           fi
 
-      - name: Guardar resultado
+      - name: Guardar resultado (exemplo temporário)
+        run: echo '{"result": "simulado"}' > result.json
+
+      - name: Upload artefacto
         uses: actions/upload-artifact@v4
         with:
           name: flux-result
